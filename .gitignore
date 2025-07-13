@@ -54,3 +54,7 @@ coverage*
 **/lcov-report/**
 **/*.html
 **/*.xml
+
+# White listings
+
+!index.html
