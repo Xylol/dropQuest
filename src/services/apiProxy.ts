@@ -1,0 +1,87 @@
+import { LocalBackendService } from './LocalBackendService';
+
+const localBackend = new LocalBackendService();
+
+const originalFetch = window.fetch;
+
+window.fetch = async function(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const url = typeof input === 'string' ? input : 
+               input instanceof URL ? input.href : 
+               input.url;
+
+  if (url.startsWith('/api/') || url.includes('/api/')) {
+    const method = init?.method || 'GET';
+    let body: any = undefined;
+
+    if (init?.body) {
+      try {
+        if (typeof init.body === 'string') {
+          body = JSON.parse(init.body);
+        } else if (init.body instanceof FormData) {
+          body = Object.fromEntries(init.body.entries());
+        } else {
+          body = init.body;
+        }
+      } catch (error) {
+        body = init.body;
+      }
+    }
+
+    const mockResponse = await localBackend.handleRequest(method, url, body);
+    
+    const responseBody = JSON.stringify(await mockResponse.json());
+    
+    return new Response(responseBody, {
+      status: mockResponse.status,
+      statusText: mockResponse.ok ? 'OK' : 'Error',
+      headers: mockResponse.headers
+    });
+  }
+
+  return originalFetch.call(this, input, init);
+};
+
+export function initializeApiProxy() {
+}
+
+export function disableApiProxy() {
+  window.fetch = originalFetch;
+}
+
+export function enableApiProxy() {
+  window.fetch = async function(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    const url = typeof input === 'string' ? input : 
+                 input instanceof URL ? input.href : 
+                 input.url;
+
+    if (url.startsWith('/api/') || url.includes('/api/')) {
+      const method = init?.method || 'GET';
+      let body: any = undefined;
+
+      if (init?.body) {
+        try {
+          if (typeof init.body === 'string') {
+            body = JSON.parse(init.body);
+          } else if (init.body instanceof FormData) {
+            body = Object.fromEntries(init.body.entries());
+          } else {
+            body = init.body;
+          }
+        } catch (error) {
+          body = init.body;
+        }
+      }
+
+      const mockResponse = await localBackend.handleRequest(method, url, body);
+      const responseBody = JSON.stringify(await mockResponse.json());
+      
+      return new Response(responseBody, {
+        status: mockResponse.status,
+        statusText: mockResponse.ok ? 'OK' : 'Error',
+        headers: mockResponse.headers
+      });
+    }
+
+    return originalFetch.call(this, input, init);
+  };
+}
