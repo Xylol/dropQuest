@@ -52,7 +52,8 @@
       if (redirect) {
         // Clean up the URL and navigate to the intended route
         const cleanUrl = window.location.origin + window.location.pathname;
-        history.replaceState(null, null, cleanUrl + redirect);
+        const finalUrl = cleanUrl + (redirect.startsWith('/') ? redirect : '/' + redirect);
+        history.replaceState(null, null, finalUrl);
       }
     </script>
   </head>
