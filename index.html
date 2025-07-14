@@ -50,10 +50,8 @@
       const urlParams = new URLSearchParams(window.location.search);
       const redirect = urlParams.get('redirect');
       if (redirect) {
-        // Clean up the URL and navigate to the intended route
-        const cleanUrl = window.location.origin + window.location.pathname;
-        const finalUrl = cleanUrl + (redirect.startsWith('/') ? redirect : '/' + redirect);
-        history.replaceState(null, null, finalUrl);
+        // Navigate to the route relative to the basename
+        history.replaceState(null, null, '/dropQuest' + redirect);
       }
     </script>
   </head>
