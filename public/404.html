@@ -48,11 +48,17 @@
 
   <!-- SPA fallback script -->
   <script>
+    // GitHub Pages SPA redirect - pass path as URL parameter
     const path = window.location.pathname.replace('/dropQuest', '');
     const search = window.location.search;
     const hash = window.location.hash;
-    window.location.replace('/dropQuest/' +
-    (path === '/' ? '' : path.slice(1)) + search + hash);
+    const redirectPath = path + search + hash;
+    
+    if (redirectPath !== '/') {
+      window.location.replace('/dropQuest/?redirect=' + encodeURIComponent(redirectPath));
+    } else {
+      window.location.replace('/dropQuest/');
+    }
   </script>
 </head>
 
