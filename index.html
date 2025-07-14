@@ -43,6 +43,18 @@
       fullscreen=(self),
       payment=()
     ">
+    
+    <!-- SPA redirect handler -->
+    <script>
+      // Handle redirects from 404.html
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect');
+      if (redirect) {
+        // Clean up the URL and navigate to the intended route
+        const cleanUrl = window.location.origin + window.location.pathname;
+        history.replaceState(null, null, cleanUrl + redirect);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
