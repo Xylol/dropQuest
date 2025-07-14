@@ -2,10 +2,8 @@ name: Build and Test
 
 on:
   push:
-    branches: [ '**' ]
     branches-ignore: [ master ]
   pull_request:
-    branches: [ '**' ]
     branches-ignore: [ master ]
 
 jobs:
