@@ -8,7 +8,6 @@ import BottomNav from "../components/BottomNav";
 import Button from "../components/Button";
 import InfoBox from "../components/InfoBox";
 import ProgressBox from "../components/ProgressBox";
-import RarityInput from "../components/RarityInput";
 import RunsInput from "../components/RunsInput";
 import StatCard from "../components/StatCard";
 
@@ -151,7 +150,7 @@ function ItemDetail() {
       const response = await fetch(`/api/items`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemId: item.id, name: editedName }),
+        body: JSON.stringify({ itemId: item.id, name: editedName.trim() }),
       });
 
       if (response.ok) {
@@ -257,14 +256,6 @@ function ItemDetail() {
         </Button>
       </header>
 
-      {!item.rarity && (
-        <div style={{ marginBottom: "var(--space-m)" }}>
-          <RarityInput
-            itemId={item.id}
-            onRaritySet={() => window.location.reload()}
-          />
-        </div>
-      )}
 
       {item.rarity && item.numberOfRuns ? (
         <div style={{ marginBottom: "1rem" }}>

@@ -107,7 +107,7 @@ function InfoBox({
 
   const formatDisplayValue = () => {
     if (title === "RARITY" && typeof value === "number") {
-      return value > 0 ? `1/${value.toLocaleString()}` : "1/Not Set";
+      return value > 0 ? `1/${value.toLocaleString()}` : "1 / Not Set";
     }
     if (typeof value === "number") {
       return value.toLocaleString();
