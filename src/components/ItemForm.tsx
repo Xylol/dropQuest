@@ -33,7 +33,8 @@ function ItemForm({ playerId, onItemCreated }: ItemFormProps): JSX.Element {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
-    const sanitizationResult = InputSanitizationService.sanitizeItemName(name);
+    const trimmedName = name.trim();
+    const sanitizationResult = InputSanitizationService.sanitizeItemName(trimmedName);
     if (!sanitizationResult.isValid) {
       setValidationError(sanitizationResult.error || "Invalid item name format");
       return;

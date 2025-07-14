@@ -23,7 +23,7 @@ function PlayerStats({ player, items, onHeroNameUpdated }: PlayerStatsProps) {
 
   // Update handler for hero name
   const handleHeroNameUpdate = async (newValue: string | number): Promise<boolean> => {
-    const heroName = newValue.toString();
+    const heroName = newValue.toString().trim();
     const sanitizationResult = InputSanitizationService.sanitizeHeroName(heroName);
     
     if (!sanitizationResult.isValid) {

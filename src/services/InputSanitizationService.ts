@@ -201,7 +201,7 @@ export class InputSanitizationService {
     return this.sanitizeText(input, {
       maxLength: 50,
       allowedChars: /^[a-zA-Z0-9\s\-_.'"!]*$/,
-      trim: true,
+      trim: false,
     });
   }
 
@@ -216,7 +216,7 @@ export class InputSanitizationService {
     return this.sanitizeText(input, {
       maxLength: 100,
       allowedChars: /^[a-zA-Z0-9\s\-_.'"!?()]*$/,
-      trim: true,
+      trim: false,
     });
   }
 
