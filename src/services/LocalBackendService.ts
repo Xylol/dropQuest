@@ -187,6 +187,18 @@ export class LocalBackendService {
         }
       }
 
+      if (updates.minutesPerRun !== undefined) {
+        if (typeof updates.minutesPerRun !== "number") {
+          return sendError(400, "Minutes per run must be a number");
+        }
+        if (updates.minutesPerRun < 0) {
+          return sendError(400, "Minutes per run cannot be negative");
+        }
+        if (updates.minutesPerRun > 10000) {
+          return sendError(400, "Minutes per run cannot exceed 10,000");
+        }
+      }
+
       let updatedItem: unknown;
 
       if (updates.numberOfRuns !== undefined) {

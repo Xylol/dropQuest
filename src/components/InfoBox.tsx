@@ -27,8 +27,8 @@ function InfoBox({
   const handleClick = () => {
     if (editable && !isLoading) {
       setIsEditing(true);
-      // For RARITY and RUNS, if value is 0, start with empty string
-      if ((title === "RARITY" || title === "RUNS") && value === 0) {
+      // For RARITY, RUNS, and MINUTES PER RUN, if value is 0, start with empty string
+      if ((title === "RARITY" || title === "RUNS" || title === "MINUTES PER RUN") && value === 0) {
         setInputValue("");
       } else {
         setInputValue(value.toString());
@@ -50,8 +50,8 @@ function InfoBox({
           setValidationError("");
         }
       }
-    } else if (inputType === "text" && title === "RUNS") {
-      if (newValue === "" || /^\d+$/.test(newValue)) {
+    } else if (inputType === "text" && (title === "RUNS" || title === "MINUTES PER RUN")) {
+      if (newValue === "" || /^\d+(\.\d*)?$/.test(newValue)) {
         setInputValue(newValue);
         if (newValue && validationFn) {
           setValidationError(validationFn(newValue));
@@ -96,8 +96,8 @@ function InfoBox({
 
   const handleCancel = () => {
     setIsEditing(false);
-    // For RARITY and RUNS, if value is 0, start with empty string
-    if ((title === "RARITY" || title === "RUNS") && value === 0) {
+    // For RARITY, RUNS, and MINUTES PER RUN, if value is 0, start with empty string
+    if ((title === "RARITY" || title === "RUNS" || title === "MINUTES PER RUN") && value === 0) {
       setInputValue("");
     } else {
       setInputValue(value.toString());
