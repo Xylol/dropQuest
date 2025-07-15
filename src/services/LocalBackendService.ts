@@ -108,12 +108,12 @@ export class LocalBackendService {
       }
 
       const items = this.itemService.getItemsByPlayerId(id);
-      const experience = this.playerService.calculatePlayerExperience(items);
+      const foundItemsCount = this.playerService.getFoundItemsCount(items);
 
       const playerWithItems = {
         ...player,
         items: items,
-        experience: experience,
+        foundItemsCount: foundItemsCount,
       };
 
       return createResponse(200, playerWithItems);
@@ -165,8 +165,8 @@ export class LocalBackendService {
         if (updates.numberOfRuns < 0) {
           return sendError(400, "Runs cannot be negative");
         }
-        if (updates.numberOfRuns > 100000) {
-          return sendError(400, "Runs cannot exceed 100,000");
+        if (updates.numberOfRuns > 1000000) {
+          return sendError(400, "Runs cannot exceed 1,000,000");
         }
       }
 
@@ -223,6 +223,14 @@ export class LocalBackendService {
       if (!updatedItem) {
         return sendError(404, "Item not found");
       }
+
+      // Update player experience based on all items
+      if (updatedItem.playerId) {
+        const allPlayerItems = this.itemService.getItemsByPlayerId(updatedItem.playerId);
+        const foundItemsCount = this.playerService.getFoundItemsCount(allPlayerItems);
+        this.playerService.updatePlayerFoundItemsCounter(updatedItem.playerId, foundItemsCount);
+      }
+
       return createResponse(200, updatedItem);
     }
 

@@ -103,6 +103,15 @@ export class ItemService {
     }
 
     const updatedItem = { ...items[itemIndex], ...updates };
+    
+    // Recalculate achievement text if runs or rarity changed
+    if (updatedItem.numberOfRuns !== undefined && updatedItem.rarity !== undefined) {
+      updatedItem.achievementText = calculateAchievementText(
+        updatedItem.numberOfRuns,
+        updatedItem.rarity
+      );
+    }
+    
     items[itemIndex] = updatedItem;
     this.storageService.save(this.ITEMS_KEY, items);
     return updatedItem;

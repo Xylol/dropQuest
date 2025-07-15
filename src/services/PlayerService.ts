@@ -44,7 +44,7 @@ export class PlayerService {
     const player: Player = {
       id: generateId(),
       createdAt: new Date().toISOString(),
-      experience: 0,
+      foundItemsCount: 0,
       items: [],
     };
 
@@ -64,9 +64,9 @@ export class PlayerService {
     return players.find((player) => player.id === id) || null;
   }
 
-  updatePlayerExperience(
+  updatePlayerFoundItemsCounter(
     playerId: string,
-    newExperience: number
+    foundItemsCount: number
   ): Player | null {
     const players = this.getAllPlayers();
     const playerIndex = players.findIndex((player) => player.id === playerId);
@@ -77,7 +77,7 @@ export class PlayerService {
 
     players[playerIndex] = {
       ...players[playerIndex],
-      experience: newExperience,
+      foundItemsCount: foundItemsCount,
     };
 
     this.storageService.save(this.PLAYERS_KEY, players);
@@ -101,17 +101,16 @@ export class PlayerService {
     return players[playerIndex];
   }
 
-  calculatePlayerExperience(items: any[]): number {
-    let totalExperience = 0;
+  getFoundItemsCount(items: any[]): number {
+    let foundItemsCount = 0;
 
     for (const item of items) {
-      if (item.found && item.rarity && item.rarity > 0) {
-        const experienceFromItem = Math.floor(item.rarity / 100);
-        totalExperience += experienceFromItem;
+      if (item.found) {
+        foundItemsCount++;
       }
     }
 
-    return totalExperience;
+    return foundItemsCount;
   }
 
   updateItem(id: string, updatedItemData: Partial<Player>): Player | null {

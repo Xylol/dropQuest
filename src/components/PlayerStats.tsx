@@ -69,7 +69,7 @@ function PlayerStats({ player, items, onHeroNameUpdated }: PlayerStatsProps) {
       />
       <InfoBox
         title="FINISHED HUNTS"
-        value={player.experience || 0}
+        value={player.foundItemsCount || 0}
         editable={false}
       />
       <InfoBox
