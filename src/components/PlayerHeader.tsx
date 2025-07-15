@@ -6,7 +6,7 @@ interface PlayerHeaderProps {
   onDeletePlayer: () => void;
 }
 
-function PlayerHeader({ player, onDeletePlayer }: PlayerHeaderProps) {
+function PlayerHeader({ player: _player, onDeletePlayer }: PlayerHeaderProps) {
   const handleDeleteClick = () => {
     if (
       confirm(

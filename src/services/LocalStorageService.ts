@@ -31,7 +31,7 @@ export class LocalStorageService {
     return Math.abs(hash).toString(36).substring(0, 8);
   }
 
-  save(key: string, data: any): void {
+  save(key: string, data: unknown): void {
     const prefixedKey = this.prefix + key;
 
     try {
@@ -67,13 +67,13 @@ export class LocalStorageService {
     try {
       const rawData = localStorage.getItem(prefixedKey);
       return rawData ? JSON.parse(rawData) : null;
-    } catch (error) {
+    } catch {
       return null;
     }
   }
 
-  getAll(): { [key: string]: any } {
-    const result: { [key: string]: any } = {};
+  getAll(): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
     const prefixLength = this.prefix.length;
 
     for (let i = 0; i < localStorage.length; i++) {

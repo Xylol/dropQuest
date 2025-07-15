@@ -230,7 +230,7 @@ export class InputSanitizationService {
   } {
     return this.sanitizeNumber(input, {
       min: 1,
-      max: 100000,
+      max: 1000000,
       integer: true,
     });
   }

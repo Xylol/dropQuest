@@ -11,7 +11,7 @@ window.fetch = async function(input: RequestInfo | URL, init?: RequestInit): Pro
 
   if (url.startsWith('/api/') || url.includes('/api/')) {
     const method = init?.method || 'GET';
-    let body: any = undefined;
+    let body: unknown = undefined;
 
     if (init?.body) {
       try {
@@ -22,7 +22,7 @@ window.fetch = async function(input: RequestInfo | URL, init?: RequestInit): Pro
         } else {
           body = init.body;
         }
-      } catch (error) {
+      } catch {
         body = init.body;
       }
     }
@@ -56,7 +56,7 @@ export function enableApiProxy() {
 
     if (url.startsWith('/api/') || url.includes('/api/')) {
       const method = init?.method || 'GET';
-      let body: any = undefined;
+      let body: unknown = undefined;
 
       if (init?.body) {
         try {
@@ -67,7 +67,7 @@ export function enableApiProxy() {
           } else {
             body = init.body;
           }
-        } catch (error) {
+        } catch {
           body = init.body;
         }
       }
