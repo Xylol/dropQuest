@@ -5,7 +5,7 @@ function generateId(): string {
   return crypto.randomUUID();
 }
 
-export function calculateAchievementText(
+function calculateAchievementText(
   runs: number,
   rarity: number
 ): string | null {

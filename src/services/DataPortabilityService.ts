@@ -1,4 +1,6 @@
 import type { ExportData, ImportResult } from '../types/api';
+import type { Player } from '../types/Player';
+import type { Item } from '../types/Item';
 
 import { LocalStorageService } from './LocalStorageService';
 
@@ -53,23 +55,25 @@ export class DataPortabilityService {
       return { valid: false, error: 'Invalid file format - not a valid JSON object' };
     }
 
-    if (!data.appName || data.appName !== 'DropQuest') {
+    const typedData = data as Record<string, unknown>;
+
+    if (!typedData.appName || typedData.appName !== 'DropQuest') {
       return { valid: false, error: 'This file is not a DropQuest backup file' };
     }
 
-    if (!data.version) {
+    if (!typedData.version) {
       return { valid: false, error: 'Backup file is missing version information' };
     }
 
-    if (!Array.isArray(data.players)) {
+    if (!Array.isArray(typedData.players)) {
       return { valid: false, error: 'Invalid backup format - players data is corrupted' };
     }
 
-    if (!Array.isArray(data.items)) {
+    if (!Array.isArray(typedData.items)) {
       return { valid: false, error: 'Invalid backup format - items data is corrupted' };
     }
 
-    for (const player of data.players) {
+    for (const player of typedData.players) {
       if (!player.id || typeof player.id !== 'string') {
         return { valid: false, error: 'Invalid player data - missing or invalid ID' };
       }
@@ -78,7 +82,7 @@ export class DataPortabilityService {
       }
     }
 
-    for (const item of data.items) {
+    for (const item of typedData.items) {
       if (!item.id || typeof item.id !== 'string') {
         return { valid: false, error: 'Invalid item data - missing or invalid ID' };
       }
@@ -115,8 +119,8 @@ export class DataPortabilityService {
         const existingPlayerIds = new Set(existingPlayers.map(p => p.id));
         const existingItemIds = new Set(existingItems.map(i => i.id));
 
-        const newPlayers = (data as ExportData).players.filter((p: Player) => !existingPlayerIds.has(p.id));
-        const newItems = (data as ExportData).items.filter((i: Item) => !existingItemIds.has(i.id));
+        const newPlayers = (data as ExportData).players.filter((p) => !existingPlayerIds.has(p.id));
+        const newItems = (data as ExportData).items.filter((i) => !existingItemIds.has(i.id));
 
         finalPlayers = [...existingPlayers, ...newPlayers];
         finalItems = [...existingItems, ...newItems];

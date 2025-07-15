@@ -1,39 +1,11 @@
 import { Player } from "../types/Player";
 import { LocalStorageService } from "./LocalStorageService";
 import { Item } from "../types/Item";
-import { calculateItemLuck } from "./ItemService";
 
 function generateId(): string {
   return crypto.randomUUID();
 }
 
-export function calculatePlayerLuck(items: Item[]): number {
-  if (items.length === 0) {
-    return 0;
-  }
-
-  let totalWeightedLuck = 0;
-  let totalWeight = 0;
-
-  for (const item of items) {
-    if (
-      item.rarity &&
-      item.numberOfRuns &&
-      item.rarity > 0 &&
-      item.numberOfRuns > 0
-    ) {
-      const itemLuck = calculateItemLuck(item.numberOfRuns, item.rarity);
-      totalWeightedLuck += itemLuck * item.rarity;
-      totalWeight += item.rarity;
-    }
-  }
-
-  if (totalWeight === 0) {
-    return 0;
-  }
-
-  return totalWeightedLuck / totalWeight;
-}
 
 export class PlayerService {
   private readonly PLAYERS_KEY = "players";
