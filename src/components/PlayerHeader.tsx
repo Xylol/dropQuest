@@ -21,7 +21,7 @@ function PlayerHeader({ player: _player, onDeletePlayer }: PlayerHeaderProps) {
   };
 
   const handleSwitchPlayer = () => {
-    navigate("/continue");
+    navigate("/player-selection");
   };
 
   return (

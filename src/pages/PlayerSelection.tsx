@@ -7,7 +7,7 @@ import ErrorState from "../components/ErrorState";
 import useGetAllPlayers from "../hooks/useGetAllPlayers";
 import { sortPlayersByLastUsed } from "../utils/playerUtils";
 
-function ContinuePlayer() {
+function PlayerSelection() {
   const navigate = useNavigate();
   const { players, loading, error } = useGetAllPlayers();
   
@@ -177,4 +177,4 @@ function ContinuePlayer() {
   );
 }
 
-export default ContinuePlayer;
+export default PlayerSelection;
