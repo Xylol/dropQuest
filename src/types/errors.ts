@@ -17,5 +17,5 @@ export interface ValidationResult {
  * Type guard to check if an object is a BackendError
  */
 export function isBackendError(obj: unknown): obj is BackendError {
-  return obj && typeof obj.error === "string";
+  return obj !== null && typeof obj === "object" && typeof (obj as BackendError).error === "string";
 }

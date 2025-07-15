@@ -129,7 +129,8 @@ export class LocalBackendService {
         return sendError(400, validation.error!);
       }
 
-      const newItem = this.itemService.createItem(body.name, body.playerId);
+      const typedBody = body as Record<string, unknown>;
+      const newItem = this.itemService.createItem(typedBody.name as string, typedBody.playerId as string);
       return createResponse(201, newItem);
     }
 
@@ -143,14 +144,15 @@ export class LocalBackendService {
 
   private handlePatch(path: string, body: unknown): MockResponse {
     if (path === "/api/items") {
-      const { itemId, ...updates } = body;
+      const typedBody = body as Record<string, unknown>;
+      const { itemId, ...updates } = typedBody;
 
-      if (!isValidUUID(itemId)) {
+      if (!isValidUUID(itemId as string)) {
         return sendError(400, "Invalid item ID format");
       }
 
       if (updates.name !== undefined) {
-        if (!updates.name || updates.name.trim().length === 0) {
+        if (!updates.name || (updates.name as string).trim().length === 0) {
           return sendError(400, "Name cannot be empty.");
         }
       }
@@ -188,7 +190,7 @@ export class LocalBackendService {
       let updatedItem: unknown;
 
       if (updates.numberOfRuns !== undefined) {
-        const currentItem = this.itemService.getItemById(itemId);
+        const currentItem = this.itemService.getItemById(itemId as string);
         if (!currentItem) {
           return sendError(404, "Item not found.");
         }
@@ -198,12 +200,12 @@ export class LocalBackendService {
 
         if (newRuns > currentRuns) {
           const runsToAdd = newRuns - currentRuns;
-          updatedItem = this.itemService.addRunsToItem(itemId, runsToAdd);
+          updatedItem = this.itemService.addRunsToItem(itemId as string, runsToAdd);
         } else {
-          updatedItem = this.itemService.updateTotalRuns(itemId, newRuns);
+          updatedItem = this.itemService.updateTotalRuns(itemId as string, newRuns);
         }
       } else {
-        updatedItem = this.itemService.updateItem(itemId, updates);
+        updatedItem = this.itemService.updateItem(itemId as string, updates);
       }
 
       if (!updatedItem) {
@@ -219,7 +221,8 @@ export class LocalBackendService {
         return sendError(400, validation.error!);
       }
 
-      const updatedItem = this.itemService.markAsFound(body.itemId, body.found);
+      const typedBody = body as Record<string, unknown>;
+      const updatedItem = this.itemService.markAsFound(typedBody.itemId as string, typedBody.found as boolean);
       if (!updatedItem) {
         return sendError(404, "Item not found");
       }
@@ -237,7 +240,8 @@ export class LocalBackendService {
     const heroNameMatch = path.match(/^\/api\/player\/(.+)\/hero-name$/);
     if (heroNameMatch) {
       const id = heroNameMatch[1];
-      const { heroName } = body;
+      const typedBody = body as Record<string, unknown>;
+      const { heroName } = typedBody;
 
       if (!heroName || typeof heroName !== "string") {
         return sendError(400, "Hero name is required");

@@ -101,70 +101,77 @@ export class ItemValidationService {
   }
 
   static validateCreateItemRequest(body: unknown): ValidationResult {
-    const nameValidation = this.validateItemName(body.name);
+    const typedBody = body as Record<string, unknown>;
+    const nameValidation = this.validateItemName(typedBody.name as string);
     if (!nameValidation.isValid) return nameValidation;
 
-    const playerIdValidation = this.validatePlayerId(body.playerId);
+    const playerIdValidation = this.validatePlayerId(typedBody.playerId as string);
     if (!playerIdValidation.isValid) return playerIdValidation;
 
     return { isValid: true };
   }
 
   static validateUpdateNameRequest(body: unknown): ValidationResult {
-    const itemIdValidation = this.validateItemId(body.itemId);
+    const typedBody = body as Record<string, unknown>;
+    const itemIdValidation = this.validateItemId(typedBody.itemId as string);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
-    const nameValidation = this.validateItemName(body.name);
+    const nameValidation = this.validateItemName(typedBody.name as string);
     if (!nameValidation.isValid) return nameValidation;
 
     return { isValid: true };
   }
 
   static validateAddRunsRequest(body: unknown): ValidationResult {
-    const itemIdValidation = this.validateItemId(body.itemId);
+    const typedBody = body as Record<string, unknown>;
+    const itemIdValidation = this.validateItemId(typedBody.itemId as string);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
-    const runsValidation = this.validateRuns(body.runs);
+    const runsValidation = this.validateRuns(typedBody.runs);
     if (!runsValidation.isValid) return runsValidation;
 
     return { isValid: true };
   }
 
   static validateSetRarityRequest(body: unknown): ValidationResult {
-    const itemIdValidation = this.validateItemId(body.itemId);
+    const typedBody = body as Record<string, unknown>;
+    const itemIdValidation = this.validateItemId(typedBody.itemId as string);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
-    const rarityValidation = this.validateRarity(body.rarity);
+    const rarityValidation = this.validateRarity(typedBody.rarity);
     if (!rarityValidation.isValid) return rarityValidation;
 
     return { isValid: true };
   }
 
   static validateUpdateDateRequest(body: unknown): ValidationResult {
-    const itemIdValidation = this.validateItemId(body.itemId);
+    const typedBody = body as Record<string, unknown>;
+    const itemIdValidation = this.validateItemId(typedBody.itemId as string);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
-    const dateValidation = this.validateDate(body.date);
+    const dateValidation = this.validateDate(typedBody.date as string);
     if (!dateValidation.isValid) return dateValidation;
 
     return { isValid: true };
   }
 
   static validateUpdateTotalRunsRequest(body: unknown): ValidationResult {
-    const itemIdValidation = this.validateItemId(body.itemId);
+    const typedBody = body as Record<string, unknown>;
+    const itemIdValidation = this.validateItemId(typedBody.itemId as string);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
-    const runsValidation = this.validateRuns(body.totalRuns);
+    const runsValidation = this.validateRuns(typedBody.totalRuns);
     if (!runsValidation.isValid) return runsValidation;
 
     return { isValid: true };
   }
 
   static validateMarkAsFoundRequest(body: unknown): ValidationResult {
-    const itemIdValidation = this.validateItemId(body.itemId);
+    const typedBody = body as Record<string, unknown>;
+    const itemIdValidation = this.validateItemId(typedBody.itemId as string);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
-    const foundValidation = this.validateFound(body.found);
+    const foundValidation = this.validateFound(typedBody.found);
     if (!foundValidation.isValid) return foundValidation;
 
     return { isValid: true };
