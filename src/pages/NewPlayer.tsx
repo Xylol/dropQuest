@@ -16,7 +16,7 @@ function NewPlayer() {
         } else {
           navigate("/"); // Redirect home on error
         }
-      } catch (error) {
+      } catch {
         navigate("/"); // Redirect home on error
       }
     };

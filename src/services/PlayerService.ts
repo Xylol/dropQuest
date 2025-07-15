@@ -101,7 +101,7 @@ export class PlayerService {
     return players[playerIndex];
   }
 
-  getFoundItemsCount(items: any[]): number {
+  getFoundItemsCount(items: Item[]): number {
     let foundItemsCount = 0;
 
     for (const item of items) {

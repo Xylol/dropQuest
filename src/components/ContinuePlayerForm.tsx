@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { BackendError } from "../utils/errorUtils";
 
@@ -53,9 +53,6 @@ function ContinuePlayerForm({
     }
   };
 
-  const validatePlayerId = (value: string): boolean => {
-    return value.length <= 36;
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

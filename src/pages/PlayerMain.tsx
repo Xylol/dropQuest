@@ -1,39 +1,16 @@
-import { useState } from "react";
 
 import { useParams, useNavigate } from "react-router-dom";
-
-import type { Item } from "../types/Item";
-import type { Player } from "../types/Player";
-import type { BackendError } from "../utils/errorUtils";
-
-import { isValidUUID } from "../services/validation";
 
 import useMarkAsFound from "../hooks/useMarkAsFound";
 import { usePlayerData } from "../hooks/usePlayerData";
 
 import BottomNav from "../components/BottomNav";
-import Button from "../components/Button";
-import ContinuePlayerForm from "../components/ContinuePlayerForm";
 import ErrorState from "../components/ErrorState";
 import ItemsSection from "../components/ItemsSection";
 import LoadingState from "../components/LoadingState";
 import NotFoundState from "../components/NotFoundState";
 import PlayerHeader from "../components/PlayerHeader";
 import PlayerStats from "../components/PlayerStats";
-
-import { fetchWithErrorHandling } from "../utils/errorUtils";
-
-const HTTP_STATUS = {
-  OK: 200,
-  NOT_FOUND: 404,
-} as const;
-
-const ERROR_MESSAGES = {
-  PLAYER_NOT_FOUND: "Player not found",
-  FETCH_FAILED: "Failed to fetch player data",
-  NETWORK_ERROR: "Something went wrong when fetching player data",
-  INVALID_ID: "Invalid player ID",
-} as const;
 
 
 
@@ -42,7 +19,6 @@ function PlayerMain() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { player, items, loading, error, refetchPlayerData } = usePlayerData(id);
-  const [copySuccess, setCopySuccess] = useState<boolean>(false);
   const { markAsFound, loading: markLoading } = useMarkAsFound();
 
 
@@ -66,39 +42,6 @@ function PlayerMain() {
     refetchPlayerData();
   };
 
-  const handleContinuePlayer = async (playerId: string): Promise<void> => {
-    if (!isValidUUID(playerId)) {
-      throw new Error("Invalid UUID format");
-    }
-
-    try {
-      await fetchWithErrorHandling<Player>(`/api/player/${playerId}`);
-      navigate(`/player/${playerId}`);
-    } catch (error) {
-      throw error; // Re-throw to trigger error feedback
-    }
-  };
-
-  const copyPlayerId = async (): Promise<void> => {
-    if (!player) return;
-
-    try {
-      await navigator.clipboard.writeText(player.id);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    } catch (err) {
-    }
-  };
-
-  const copyFullUrl = async (): Promise<void> => {
-    try {
-      const fullUrl = window.location.href;
-      await navigator.clipboard.writeText(fullUrl);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    } catch (err) {
-    }
-  };
 
   if (loading) return <LoadingState />;
 

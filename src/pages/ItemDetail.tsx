@@ -8,10 +8,7 @@ import BottomNav from "../components/BottomNav";
 import Button from "../components/Button";
 import InfoBox from "../components/InfoBox";
 import ProgressBox from "../components/ProgressBox";
-import RunsInput from "../components/RunsInput";
-import StatCard from "../components/StatCard";
-
-import { formatDate, calculateDaysBetween, calculateRunsPerDay } from "../utils/dateUtils";
+import { calculateDaysBetween, calculateRunsPerDay } from "../utils/dateUtils";
 import { validateRarityInputs } from "../utils/rarityUtils";
 import useSetRarity from "../hooks/useSetRarity";
 import useUpdateTotalRuns from "../hooks/useUpdateTotalRuns";
@@ -133,7 +130,7 @@ function ItemDetail() {
         } else {
           setError("Failed to fetch item");
         }
-      } catch (error) {
+      } catch {
         setError("Something went wrong");
       } finally {
         setLoading(false);
@@ -159,7 +156,7 @@ function ItemDetail() {
         setIsEditingName(false);
       } else {
       }
-    } catch (error) {
+    } catch {
     }
   };
 

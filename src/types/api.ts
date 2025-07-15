@@ -9,7 +9,7 @@ export interface MockResponse {
   ok: boolean;
   status: number;
   headers: Headers;
-  json(): Promise<any>;
+  json(): Promise<unknown>;
 }
 
 export interface CreateItemRequest {
@@ -50,8 +50,8 @@ export interface UpdateHeroNameRequest {
 }
 
 export interface ExportData {
-  players: any[];
-  items: any[];
+  players: Player[];
+  items: Item[];
   version: string;
   exportDate: string;
   appName: string;
