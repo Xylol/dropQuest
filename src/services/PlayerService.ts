@@ -1,6 +1,7 @@
 import { Player } from "../types/Player";
 import { LocalStorageService } from "./LocalStorageService";
 import { Item } from "../types/Item";
+import { getMostRecentPlayer } from "../utils/playerUtils";
 
 function generateId(): string {
   return crypto.randomUUID();
@@ -33,7 +34,14 @@ export class PlayerService {
 
   getPlayerById(id: string): Player | null {
     const players = this.getAllPlayers();
-    return players.find((player) => player.id === id) || null;
+    const player = players.find((player) => player.id === id) || null;
+    
+    if (player) {
+      // Update lastUsedAt when player is accessed
+      this.updatePlayerLastUsed(id);
+    }
+    
+    return player;
   }
 
   updatePlayerFoundItemsCounter(
@@ -106,5 +114,23 @@ export class PlayerService {
     const players = this.getAllPlayers();
     const updatedPlayers = players.filter((player) => player.id !== id);
     this.storageService.save(this.PLAYERS_KEY, updatedPlayers);
+  }
+
+  updatePlayerLastUsed(id: string): void {
+    const players = this.getAllPlayers();
+    const playerIndex = players.findIndex((player) => player.id === id);
+    
+    if (playerIndex !== -1) {
+      players[playerIndex] = {
+        ...players[playerIndex],
+        lastUsedAt: new Date().toISOString(),
+      };
+      this.storageService.save(this.PLAYERS_KEY, players);
+    }
+  }
+
+  getLastUsedPlayer(): Player | null {
+    const players = this.getAllPlayers();
+    return getMostRecentPlayer(players);
   }
 }
