@@ -45,7 +45,7 @@ function ContinuePlayer() {
           color: "var(--color-text-secondary)", 
           marginBottom: "var(--space-l)" 
         }}>
-          You haven't created any players yet. Create your first player to start your quest!
+          You haven&apos;t created any players yet. Create your first player to start your quest!
         </p>
         <Button 
           onClick={() => navigate("/new-player")}

@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "npx tsx --test src/**/*.test.ts",
-    "build": "tsc && vite build",
-    "lint": "eslint src/**/*.{ts,tsx}"
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "test": "npm run lint && npx tsx --test src/**/*.test.ts",
+    "build": "npm run lint && tsc && vite build"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",

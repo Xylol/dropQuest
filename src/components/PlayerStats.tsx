@@ -43,7 +43,7 @@ function PlayerStats({ player, items, onHeroNameUpdated }: PlayerStatsProps) {
         onHeroNameUpdated();
       }
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   };

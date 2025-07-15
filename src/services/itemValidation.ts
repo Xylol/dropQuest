@@ -38,7 +38,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateRuns(runs: any): ValidationResult {
+  static validateRuns(runs: unknown): ValidationResult {
     if (runs === undefined || runs === null) {
       return { isValid: false, error: "Runs is required" };
     }
@@ -57,7 +57,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateRarity(rarity: any): ValidationResult {
+  static validateRarity(rarity: unknown): ValidationResult {
     if (rarity === undefined || rarity === null) {
       return { isValid: false, error: "Rarity is required" };
     }
@@ -90,7 +90,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateFound(found: any): ValidationResult {
+  static validateFound(found: unknown): ValidationResult {
     if (found === undefined || found === null) {
       return { isValid: false, error: "Found is required" };
     }
@@ -100,7 +100,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateCreateItemRequest(body: any): ValidationResult {
+  static validateCreateItemRequest(body: unknown): ValidationResult {
     const nameValidation = this.validateItemName(body.name);
     if (!nameValidation.isValid) return nameValidation;
 
@@ -110,7 +110,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateUpdateNameRequest(body: any): ValidationResult {
+  static validateUpdateNameRequest(body: unknown): ValidationResult {
     const itemIdValidation = this.validateItemId(body.itemId);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
@@ -120,7 +120,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateAddRunsRequest(body: any): ValidationResult {
+  static validateAddRunsRequest(body: unknown): ValidationResult {
     const itemIdValidation = this.validateItemId(body.itemId);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
@@ -130,7 +130,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateSetRarityRequest(body: any): ValidationResult {
+  static validateSetRarityRequest(body: unknown): ValidationResult {
     const itemIdValidation = this.validateItemId(body.itemId);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
@@ -140,7 +140,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateUpdateDateRequest(body: any): ValidationResult {
+  static validateUpdateDateRequest(body: unknown): ValidationResult {
     const itemIdValidation = this.validateItemId(body.itemId);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
@@ -150,7 +150,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateUpdateTotalRunsRequest(body: any): ValidationResult {
+  static validateUpdateTotalRunsRequest(body: unknown): ValidationResult {
     const itemIdValidation = this.validateItemId(body.itemId);
     if (!itemIdValidation.isValid) return itemIdValidation;
 
@@ -160,7 +160,7 @@ export class ItemValidationService {
     return { isValid: true };
   }
 
-  static validateMarkAsFoundRequest(body: any): ValidationResult {
+  static validateMarkAsFoundRequest(body: unknown): ValidationResult {
     const itemIdValidation = this.validateItemId(body.itemId);
     if (!itemIdValidation.isValid) return itemIdValidation;
 

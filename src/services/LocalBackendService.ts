@@ -6,7 +6,7 @@ import { LocalStorageService } from "./LocalStorageService";
 import { PlayerService } from "./PlayerService";
 import { isValidUUID } from "./validation";
 
-function createResponse(status: number, data: any): MockResponse {
+function createResponse(status: number, data: unknown): MockResponse {
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
 
@@ -24,9 +24,9 @@ function sendError(
   status: number,
   error: string,
   code?: string,
-  details?: any
+  details?: unknown
 ): MockResponse {
-  const errObj: any = { error };
+  const errObj: Record<string, unknown> = { error };
   if (code) errObj.code = code;
   if (details) errObj.details = details;
   return createResponse(status, errObj);
@@ -46,7 +46,7 @@ export class LocalBackendService {
   async handleRequest(
     method: string,
     url: string,
-    body?: any
+    body?: unknown
   ): Promise<MockResponse> {
     try {
       const urlObj = new URL(url, "http://localhost");
@@ -65,7 +65,7 @@ export class LocalBackendService {
         default:
           return sendError(405, `Method ${method} not allowed`);
       }
-    } catch (error) {
+    } catch {
       return sendError(500, "Internal server error");
     }
   }
@@ -122,7 +122,7 @@ export class LocalBackendService {
     return sendError(404, "Not found");
   }
 
-  private handlePost(path: string, body: any): MockResponse {
+  private handlePost(path: string, body: unknown): MockResponse {
     if (path === "/api/items") {
       const validation = ItemValidationService.validateCreateItemRequest(body);
       if (!validation.isValid) {
@@ -141,7 +141,7 @@ export class LocalBackendService {
     return sendError(404, "Not found");
   }
 
-  private handlePatch(path: string, body: any): MockResponse {
+  private handlePatch(path: string, body: unknown): MockResponse {
     if (path === "/api/items") {
       const { itemId, ...updates } = body;
 
@@ -185,7 +185,7 @@ export class LocalBackendService {
         }
       }
 
-      let updatedItem: any;
+      let updatedItem: unknown;
 
       if (updates.numberOfRuns !== undefined) {
         const currentItem = this.itemService.getItemById(itemId);
