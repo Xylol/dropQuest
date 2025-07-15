@@ -82,6 +82,23 @@ function ItemDetail() {
     return "";
   };
 
+  const validateMinutesPerRun = (value: string): string => {
+    if (!value.trim()) {
+      return "Minutes per run is required";
+    }
+    const numValue = parseFloat(value);
+    if (isNaN(numValue)) {
+      return "Minutes per run must be a number";
+    }
+    if (numValue < 0) {
+      return "Minutes per run cannot be negative";
+    }
+    if (numValue > 10000) {
+      return "Minutes per run cannot exceed 10,000";
+    }
+    return "";
+  };
+
   // Update handlers
   const handleRarityUpdate = async (newValue: string | number): Promise<boolean> => {
     if (!item) return false;
@@ -110,6 +127,28 @@ function ItemDetail() {
       window.location.reload();
     }
     return success;
+  };
+
+  const handleMinutesPerRunUpdate = async (newValue: string | number): Promise<boolean> => {
+    if (!item) return false;
+    const minutesPerRun = parseFloat(newValue.toString());
+    
+    try {
+      const response = await fetch(`/api/items`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemId: item.id, minutesPerRun }),
+      });
+
+      if (response.ok) {
+        window.location.reload();
+        return true;
+      } else {
+        return false;
+      }
+    } catch {
+      return false;
+    }
   };
 
   useEffect(() => {
@@ -299,6 +338,14 @@ function ItemDetail() {
           validationFn={validateRuns}
         />
         <InfoBox
+          title="MINUTES PER RUN"
+          value={item.minutesPerRun || 0}
+          editable={true}
+          inputType="text"
+          onUpdate={handleMinutesPerRunUpdate}
+          validationFn={validateMinutesPerRun}
+        />
+        <InfoBox
           title="DAYS"
           value={Math.max(
             1,
@@ -325,6 +372,24 @@ function ItemDetail() {
         <InfoBox
           title="RUNS PER DAY"
           value={runsPerDay}
+          editable={false}
+        />
+        <InfoBox
+          title="TOTAL RUNTIME"
+          value={(() => {
+            const runs = item.numberOfRuns || 0;
+            const minutesPerRun = item.minutesPerRun || 0;
+            const totalMinutes = runs * minutesPerRun;
+            
+            if (totalMinutes === 0) return "0 min";
+            
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = Math.round(totalMinutes % 60);
+            
+            if (hours === 0) return `${minutes} min`;
+            if (minutes === 0) return `${hours}h`;
+            return `${hours}h ${minutes}m`;
+          })()}
           editable={false}
         />
       </div>
