@@ -19,7 +19,7 @@ function App() {
     if (lastUsedPlayer) {
       navigate(`/player/${lastUsedPlayer}`);
     } else {
-      navigate("/continue");
+      navigate("/player-selection");
     }
   };
 

@@ -48,7 +48,7 @@ npm run test:components  # Run component tests only
 
 ### Routing Structure
 - Uses React Router with BrowserRouter and basename `/dropQuest/`
-- Main routes: `/`, `/new-player`, `/continue`, `/settings`, `/player/:id`, `/item/:itemId`
+- Main routes: `/`, `/new-player`, `/player-selection`, `/settings`, `/player/:id`, `/item/:itemId`
 - Includes SPA routing fallback for GitHub Pages deployment
 
 ### Component Architecture

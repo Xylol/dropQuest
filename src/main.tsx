@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import App from "./App";
-import ContinuePlayer from "./pages/ContinuePlayer";
+import PlayerSelection from "./pages/PlayerSelection";
 import ItemDetail from "./pages/ItemDetail";
 import NewPlayer from "./pages/NewPlayer";
 import PlayerMain from "./pages/PlayerMain";
@@ -74,7 +74,7 @@ if (rootElement) {
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/new-player" element={<NewPlayer />} />
-          <Route path="/continue" element={<ContinuePlayer />} />
+          <Route path="/player-selection" element={<PlayerSelection />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/player" element={<Navigate to="/" replace />} />
           <Route path="/player/:id" element={<PlayerMain />} />
