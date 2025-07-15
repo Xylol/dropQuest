@@ -1,8 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import Button from "./components/Button";
+import { PlayerService } from "./services/PlayerService";
+import { LocalStorageService } from "./services/LocalStorageService";
+import { useEffect, useState } from "react";
 
 function App() {
   const navigate = useNavigate();
+  const [lastUsedPlayer, setLastUsedPlayer] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const storageService = new LocalStorageService();
+    const playerService = new PlayerService(storageService);
+    const lastPlayer = playerService.getLastUsedPlayer();
+    setLastUsedPlayer(lastPlayer?.id || null);
+  }, []);
+  
+  const handleContinueQuest = () => {
+    if (lastUsedPlayer) {
+      navigate(`/player/${lastUsedPlayer}`);
+    } else {
+      navigate("/player-selection");
+    }
+  };
 
   return (
     <div
@@ -49,7 +68,7 @@ function App() {
           Create new player
         </Button>
         <Button 
-          onClick={() => navigate("/continue")} 
+          onClick={handleContinueQuest} 
           style={{ flex: 1 }}
           variant="primary"
           size="large"

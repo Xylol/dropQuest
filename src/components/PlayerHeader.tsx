@@ -1,5 +1,6 @@
 import { Player } from "../types/Player";
 import Button from "./Button";
+import { useNavigate } from "react-router-dom";
 
 interface PlayerHeaderProps {
   player: Player;
@@ -7,6 +8,8 @@ interface PlayerHeaderProps {
 }
 
 function PlayerHeader({ player: _player, onDeletePlayer }: PlayerHeaderProps) {
+  const navigate = useNavigate();
+  
   const handleDeleteClick = () => {
     if (
       confirm(
@@ -15,6 +18,10 @@ function PlayerHeader({ player: _player, onDeletePlayer }: PlayerHeaderProps) {
     ) {
       onDeletePlayer();
     }
+  };
+
+  const handleSwitchPlayer = () => {
+    navigate("/player-selection");
   };
 
   return (
@@ -26,9 +33,12 @@ function PlayerHeader({ player: _player, onDeletePlayer }: PlayerHeaderProps) {
         marginBottom: "var(--space-m)",
       }}
     >
-      <h1 style={{ fontSize: "var(--font-size-xxl)", margin: 0 }}>
-        Player Dashboard
-      </h1>
+      <Button
+        onClick={handleSwitchPlayer}
+        variant="secondary"
+      >
+        Switch Player
+      </Button>
       <div style={{ display: "flex", gap: "var(--space-s)" }}>
         <Button
           onClick={handleDeleteClick}
