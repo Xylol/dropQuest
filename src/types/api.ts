@@ -70,7 +70,7 @@ export interface ItemResponse extends Item {
 
 export interface PlayerResponse extends Player {
   items: ItemResponse[];
-  experience: number;
+  foundItemsCount: number;
   luck?: number;
 }
 

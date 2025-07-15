@@ -143,15 +143,6 @@ function ContinuePlayer() {
                   Created: {formatDate(player.createdAt)}
                 </p>
               </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ 
-                  fontSize: "clamp(1rem, 3.5vw, 1.25rem)",
-                  fontWeight: 600,
-                  color: "var(--color-text-secondary)" 
-                }}>
-                  Experience: {player.experience || 0}
-                </div>
-              </div>
             </div>
             <div style={{ 
               fontSize: "clamp(0.625rem, 2vw, 0.875rem)",

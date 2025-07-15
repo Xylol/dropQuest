@@ -51,8 +51,8 @@ export class ItemValidationService {
     if (runs < 0) {
       return { isValid: false, error: "Runs must be a positive number" };
     }
-    if (runs > 100000) {
-      return { isValid: false, error: "Runs cannot exceed 100,000" };
+    if (runs > 1000000) {
+      return { isValid: false, error: "Runs cannot exceed 1,000,000" };
     }
     return { isValid: true };
   }
