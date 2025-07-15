@@ -6,6 +6,7 @@ import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import useGetAllPlayers from "../hooks/useGetAllPlayers";
 import { sortPlayersByLastUsed } from "../utils/playerUtils";
+import { formatDate } from "../utils/dateUtils";
 
 function PlayerSelection() {
   const navigate = useNavigate();
@@ -67,9 +68,6 @@ function PlayerSelection() {
     );
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toISOString().split("T")[0];
-  };
 
   return (
     <div
