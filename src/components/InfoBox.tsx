@@ -154,7 +154,7 @@ function InfoBox({
                   type="text"
                   value={inputValue}
                   onChange={handleInputChange}
-                  placeholder="100"
+                  placeholder=""
                   disabled={isLoading || loading}
                   autoFocus
                   style={{ 

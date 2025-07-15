@@ -1,4 +1,6 @@
 import type { ExportData, ImportResult } from '../types/api';
+import type { Player } from '../types/Player';
+import type { Item } from '../types/Item';
 
 import { LocalStorageService } from './LocalStorageService';
 
@@ -13,8 +15,8 @@ export class DataPortabilityService {
    * Export all user data to a JSON object
    */
   exportData(): ExportData {
-    const players = this.storage.get<any[]>('players') || [];
-    const items = this.storage.get<any[]>('items') || [];
+    const players = this.storage.get<Player[]>('players') || [];
+    const items = this.storage.get<Item[]>('items') || [];
 
     return {
       players,
@@ -48,28 +50,30 @@ export class DataPortabilityService {
   /**
    * Validate imported data structure
    */
-  private validateImportData(data: any): { valid: boolean; error?: string } {
+  private validateImportData(data: unknown): { valid: boolean; error?: string } {
     if (!data || typeof data !== 'object') {
       return { valid: false, error: 'Invalid file format - not a valid JSON object' };
     }
 
-    if (!data.appName || data.appName !== 'DropQuest') {
+    const typedData = data as Record<string, unknown>;
+
+    if (!typedData.appName || typedData.appName !== 'DropQuest') {
       return { valid: false, error: 'This file is not a DropQuest backup file' };
     }
 
-    if (!data.version) {
+    if (!typedData.version) {
       return { valid: false, error: 'Backup file is missing version information' };
     }
 
-    if (!Array.isArray(data.players)) {
+    if (!Array.isArray(typedData.players)) {
       return { valid: false, error: 'Invalid backup format - players data is corrupted' };
     }
 
-    if (!Array.isArray(data.items)) {
+    if (!Array.isArray(typedData.items)) {
       return { valid: false, error: 'Invalid backup format - items data is corrupted' };
     }
 
-    for (const player of data.players) {
+    for (const player of typedData.players) {
       if (!player.id || typeof player.id !== 'string') {
         return { valid: false, error: 'Invalid player data - missing or invalid ID' };
       }
@@ -78,7 +82,7 @@ export class DataPortabilityService {
       }
     }
 
-    for (const item of data.items) {
+    for (const item of typedData.items) {
       if (!item.id || typeof item.id !== 'string') {
         return { valid: false, error: 'Invalid item data - missing or invalid ID' };
       }
@@ -93,7 +97,7 @@ export class DataPortabilityService {
     return { valid: true };
   }
 
-  importData(data: any, options: { replace?: boolean } = {}): ImportResult {
+  importData(data: unknown, options: { replace?: boolean } = {}): ImportResult {
     const validation = this.validateImportData(data);
     if (!validation.valid) {
       return {
@@ -105,18 +109,18 @@ export class DataPortabilityService {
     try {
       const { replace = false } = options;
 
-      let finalPlayers = data.players;
-      let finalItems = data.items;
+      let finalPlayers = (data as ExportData).players;
+      let finalItems = (data as ExportData).items;
 
       if (!replace) {
-        const existingPlayers = this.storage.get<any[]>('players') || [];
-        const existingItems = this.storage.get<any[]>('items') || [];
+        const existingPlayers = this.storage.get<Player[]>('players') || [];
+        const existingItems = this.storage.get<Item[]>('items') || [];
 
         const existingPlayerIds = new Set(existingPlayers.map(p => p.id));
         const existingItemIds = new Set(existingItems.map(i => i.id));
 
-        const newPlayers = data.players.filter((p: any) => !existingPlayerIds.has(p.id));
-        const newItems = data.items.filter((i: any) => !existingItemIds.has(i.id));
+        const newPlayers = (data as ExportData).players.filter((p) => !existingPlayerIds.has(p.id));
+        const newItems = (data as ExportData).items.filter((i) => !existingItemIds.has(i.id));
 
         finalPlayers = [...existingPlayers, ...newPlayers];
         finalItems = [...existingItems, ...newItems];
@@ -127,8 +131,8 @@ export class DataPortabilityService {
 
       return {
         success: true,
-        playersImported: replace ? data.players.length : (finalPlayers.length - (this.storage.get<any[]>('players')?.length || 0)),
-        itemsImported: replace ? data.items.length : (finalItems.length - (this.storage.get<any[]>('items')?.length || 0))
+        playersImported: replace ? (data as ExportData).players.length : (finalPlayers.length - (this.storage.get<Player[]>('players')?.length || 0)),
+        itemsImported: replace ? (data as ExportData).items.length : (finalItems.length - (this.storage.get<Item[]>('items')?.length || 0))
       };
 
     } catch (error) {
@@ -160,7 +164,7 @@ export class DataPortabilityService {
           const data = JSON.parse(text);
           const result = this.importData(data, options);
           resolve(result);
-        } catch (error) {
+        } catch {
           resolve({
             success: false,
             error: 'Invalid JSON file format'
@@ -190,8 +194,8 @@ export class DataPortabilityService {
    * Get data summary for display
    */
   getDataSummary(): { players: number; items: number; totalSize: string } {
-    const players = this.storage.get<any[]>('players') || [];
-    const items = this.storage.get<any[]>('items') || [];
+    const players = this.storage.get<Player[]>('players') || [];
+    const items = this.storage.get<Item[]>('items') || [];
     
     const data = this.exportData();
     const sizeBytes = new Blob([JSON.stringify(data)]).size;

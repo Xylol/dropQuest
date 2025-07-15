@@ -22,10 +22,9 @@ function useUpdateTotalRuns() {
       if (response.ok) {
         return true;
       } else {
-        const errorData = await response.text();
         throw new Error("Failed to update total runs");
       }
-    } catch (error) {
+    } catch {
       setError("Failed to update total runs");
       return false;
     } finally {

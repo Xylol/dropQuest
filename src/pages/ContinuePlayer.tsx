@@ -45,7 +45,7 @@ function ContinuePlayer() {
           color: "var(--color-text-secondary)", 
           marginBottom: "var(--space-l)" 
         }}>
-          You haven't created any players yet. Create your first player to start your quest!
+          You haven&apos;t created any players yet. Create your first player to start your quest!
         </p>
         <Button 
           onClick={() => navigate("/new-player")}
@@ -142,15 +142,6 @@ function ContinuePlayer() {
                 }}>
                   Created: {formatDate(player.createdAt)}
                 </p>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ 
-                  fontSize: "clamp(1rem, 3.5vw, 1.25rem)",
-                  fontWeight: 600,
-                  color: "var(--color-text-secondary)" 
-                }}>
-                  Experience: {player.experience || 0}
-                </div>
               </div>
             </div>
             <div style={{ 

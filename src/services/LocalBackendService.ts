@@ -6,7 +6,7 @@ import { LocalStorageService } from "./LocalStorageService";
 import { PlayerService } from "./PlayerService";
 import { isValidUUID } from "./validation";
 
-function createResponse(status: number, data: any): MockResponse {
+function createResponse(status: number, data: unknown): MockResponse {
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
 
@@ -24,9 +24,9 @@ function sendError(
   status: number,
   error: string,
   code?: string,
-  details?: any
+  details?: unknown
 ): MockResponse {
-  const errObj: any = { error };
+  const errObj: Record<string, unknown> = { error };
   if (code) errObj.code = code;
   if (details) errObj.details = details;
   return createResponse(status, errObj);
@@ -46,7 +46,7 @@ export class LocalBackendService {
   async handleRequest(
     method: string,
     url: string,
-    body?: any
+    body?: unknown
   ): Promise<MockResponse> {
     try {
       const urlObj = new URL(url, "http://localhost");
@@ -65,7 +65,7 @@ export class LocalBackendService {
         default:
           return sendError(405, `Method ${method} not allowed`);
       }
-    } catch (error) {
+    } catch {
       return sendError(500, "Internal server error");
     }
   }
@@ -108,12 +108,12 @@ export class LocalBackendService {
       }
 
       const items = this.itemService.getItemsByPlayerId(id);
-      const experience = this.playerService.calculatePlayerExperience(items);
+      const foundItemsCount = this.playerService.getFoundItemsCount(items);
 
       const playerWithItems = {
         ...player,
         items: items,
-        experience: experience,
+        foundItemsCount: foundItemsCount,
       };
 
       return createResponse(200, playerWithItems);
@@ -122,14 +122,15 @@ export class LocalBackendService {
     return sendError(404, "Not found");
   }
 
-  private handlePost(path: string, body: any): MockResponse {
+  private handlePost(path: string, body: unknown): MockResponse {
     if (path === "/api/items") {
       const validation = ItemValidationService.validateCreateItemRequest(body);
       if (!validation.isValid) {
         return sendError(400, validation.error!);
       }
 
-      const newItem = this.itemService.createItem(body.name, body.playerId);
+      const typedBody = body as Record<string, unknown>;
+      const newItem = this.itemService.createItem(typedBody.name as string, typedBody.playerId as string);
       return createResponse(201, newItem);
     }
 
@@ -141,16 +142,17 @@ export class LocalBackendService {
     return sendError(404, "Not found");
   }
 
-  private handlePatch(path: string, body: any): MockResponse {
+  private handlePatch(path: string, body: unknown): MockResponse {
     if (path === "/api/items") {
-      const { itemId, ...updates } = body;
+      const typedBody = body as Record<string, unknown>;
+      const { itemId, ...updates } = typedBody;
 
-      if (!isValidUUID(itemId)) {
+      if (!isValidUUID(itemId as string)) {
         return sendError(400, "Invalid item ID format");
       }
 
       if (updates.name !== undefined) {
-        if (!updates.name || updates.name.trim().length === 0) {
+        if (!updates.name || (updates.name as string).trim().length === 0) {
           return sendError(400, "Name cannot be empty.");
         }
       }
@@ -165,8 +167,8 @@ export class LocalBackendService {
         if (updates.numberOfRuns < 0) {
           return sendError(400, "Runs cannot be negative");
         }
-        if (updates.numberOfRuns > 100000) {
-          return sendError(400, "Runs cannot exceed 100,000");
+        if (updates.numberOfRuns > 1000000) {
+          return sendError(400, "Runs cannot exceed 1,000,000");
         }
       }
 
@@ -185,10 +187,10 @@ export class LocalBackendService {
         }
       }
 
-      let updatedItem: any;
+      let updatedItem: unknown;
 
       if (updates.numberOfRuns !== undefined) {
-        const currentItem = this.itemService.getItemById(itemId);
+        const currentItem = this.itemService.getItemById(itemId as string);
         if (!currentItem) {
           return sendError(404, "Item not found.");
         }
@@ -198,12 +200,12 @@ export class LocalBackendService {
 
         if (newRuns > currentRuns) {
           const runsToAdd = newRuns - currentRuns;
-          updatedItem = this.itemService.addRunsToItem(itemId, runsToAdd);
+          updatedItem = this.itemService.addRunsToItem(itemId as string, runsToAdd);
         } else {
-          updatedItem = this.itemService.updateTotalRuns(itemId, newRuns);
+          updatedItem = this.itemService.updateItem(itemId as string, { numberOfRuns: newRuns });
         }
       } else {
-        updatedItem = this.itemService.updateItem(itemId, updates);
+        updatedItem = this.itemService.updateItem(itemId as string, updates);
       }
 
       if (!updatedItem) {
@@ -219,17 +221,27 @@ export class LocalBackendService {
         return sendError(400, validation.error!);
       }
 
-      const updatedItem = this.itemService.markAsFound(body.itemId, body.found);
+      const typedBody = body as Record<string, unknown>;
+      const updatedItem = this.itemService.markAsFound(typedBody.itemId as string, typedBody.found as boolean);
       if (!updatedItem) {
         return sendError(404, "Item not found");
       }
+
+      // Update player experience based on all items
+      if (updatedItem.playerId) {
+        const allPlayerItems = this.itemService.getItemsByPlayerId(updatedItem.playerId);
+        const foundItemsCount = this.playerService.getFoundItemsCount(allPlayerItems);
+        this.playerService.updatePlayerFoundItemsCounter(updatedItem.playerId, foundItemsCount);
+      }
+
       return createResponse(200, updatedItem);
     }
 
     const heroNameMatch = path.match(/^\/api\/player\/(.+)\/hero-name$/);
     if (heroNameMatch) {
       const id = heroNameMatch[1];
-      const { heroName } = body;
+      const typedBody = body as Record<string, unknown>;
+      const { heroName } = typedBody;
 
       if (!heroName || typeof heroName !== "string") {
         return sendError(400, "Hero name is required");

@@ -20,7 +20,7 @@ export default function Settings() {
   const handleExport = () => {
     try {
       dataService.downloadData();
-    } catch (error) {
+    } catch {
       alert("Failed to export data. Please try again.");
     }
   };
@@ -53,7 +53,7 @@ export default function Settings() {
         setImportSuccess(false);
         setImportMessage(result.error || "Import failed");
       }
-    } catch (error) {
+    } catch {
       setImportSuccess(false);
       setImportMessage("Unexpected error during import");
     } finally {
