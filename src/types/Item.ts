@@ -7,4 +7,5 @@ export interface Item {
   rarity?: number;
   achievementText?: string | null;
   found?: boolean;
+  minutesPerRun?: number;
 }
