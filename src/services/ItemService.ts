@@ -18,34 +18,34 @@ function calculateAchievementText(
     return "the mightiest out of thousands of grinds is truly yours...";
   }
   if (ratio >= 6) {
-    return "... goru mesork darma zurgu larach...";
+    return "...goru mesork darma zurgu larach...";
   }
   if (ratio >= 5) {
-    return "eternity does no longer frighten you...";
+    return "eternity no longer frightens you...";
   }
   if (ratio >= 4.5) {
-    return "truly for some nothing is written unless they writ it themselves...";
+    return "truly, for some, nothing is written unless they write it themselves...";
   }
   if (ratio >= 4) {
     return "acolyte of drop, whisper of hope, thunder of fury, unstoppable...";
   }
   if (ratio >= 3) {
-    return "you thought you earned that message we skipped too? The persistance is admirable...";
+    return "you expected this message earlier... your persistence is admirable...";
   }
   if (ratio >= 2) {
-    return "whispers... grumbling.... sounds distant, far and close, oh you better be prepared....";
+    return "whispers... grumbling... sounds both distant and near, prepare yourself...";
   }
   if (ratio >= 1.5) {
-    return "The people talk, the songs where made...";
+    return "the people talk, songs are written...";
   }
   if (ratio >= 1) {
-    return "Most believe they have earned it by now...";
+    return "most believe they have earned it by now...";
   }
   if (ratio >= 0.2) {
-    return "It feels like the mechanics aren't that hard...";
+    return "it feels like the mechanics aren't that hard...";
   }
   if (ratio >= 0.1) {
-    return "Trying things, I see...";
+    return "trying things, I see...";
   }
 
   return null;
@@ -172,20 +172,6 @@ export class ItemService {
     return items[itemIndex];
   }
 
-  updateTotalRuns(id: string, totalRuns: number): Item | null {
-    const items = this.getAllItems();
-    const itemIndex = items.findIndex((item) => item.id === id);
-    if (itemIndex === -1) {
-      return null;
-    }
-
-    items[itemIndex] = {
-      ...items[itemIndex],
-      numberOfRuns: totalRuns,
-    };
-    this.storageService.save(this.ITEMS_KEY, items);
-    return items[itemIndex];
-  }
 
   deleteItem(id: string): void {
     const items = this.getAllItems();

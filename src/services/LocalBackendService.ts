@@ -202,7 +202,7 @@ export class LocalBackendService {
           const runsToAdd = newRuns - currentRuns;
           updatedItem = this.itemService.addRunsToItem(itemId as string, runsToAdd);
         } else {
-          updatedItem = this.itemService.updateTotalRuns(itemId as string, newRuns);
+          updatedItem = this.itemService.updateItem(itemId as string, { numberOfRuns: newRuns });
         }
       } else {
         updatedItem = this.itemService.updateItem(itemId as string, updates);
