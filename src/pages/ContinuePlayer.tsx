@@ -5,10 +5,13 @@ import BottomNav from "../components/BottomNav";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import useGetAllPlayers from "../hooks/useGetAllPlayers";
+import { sortPlayersByLastUsed } from "../utils/playerUtils";
 
 function ContinuePlayer() {
   const navigate = useNavigate();
   const { players, loading, error } = useGetAllPlayers();
+  
+  const sortedPlayers = sortPlayersByLastUsed(players);
 
   if (loading) {
     return <LoadingState message="Loading your players..." />;
@@ -23,7 +26,7 @@ function ContinuePlayer() {
     );
   }
 
-  if (players.length === 0) {
+  if (sortedPlayers.length === 0) {
     return (
       <div
         style={{ 
@@ -103,7 +106,7 @@ function ContinuePlayer() {
         flexDirection: "column", 
         gap: "var(--space-s)" 
       }}>
-        {players.map((player) => (
+        {sortedPlayers.map((player) => (
           <div
             key={player.id}
             onClick={() => navigate(`/player/${player.id}`)}
@@ -142,6 +145,15 @@ function ContinuePlayer() {
                 }}>
                   Created: {formatDate(player.createdAt)}
                 </p>
+                {player.lastUsedAt && (
+                  <p style={{ 
+                    margin: "0.25rem 0 0 0", 
+                    fontSize: "clamp(0.75rem, 2.5vw, 1rem)",
+                    color: "var(--color-text-secondary)" 
+                  }}>
+                    Last selected: {formatDate(player.lastUsedAt)}
+                  </p>
+                )}
               </div>
             </div>
             <div style={{ 
