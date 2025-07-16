@@ -1,6 +1,7 @@
-import { LocalBackendService } from './LocalBackendService';
+import { ServiceContainer } from './ServiceContainer';
 
-const localBackend = new LocalBackendService();
+const serviceContainer = new ServiceContainer();
+const localBackend = serviceContainer.getBackendService();
 
 const originalFetch = window.fetch;
 
