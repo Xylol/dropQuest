@@ -1,8 +1,6 @@
 import type { BackendError } from "../types/errors";
-import { isBackendError } from "../types/errors";
 
 export type { BackendError };
-export { isBackendError };
 
 
 export async function fetchWithErrorHandling<T>(
