@@ -70,3 +70,7 @@ npm run test:components  # Run component tests only
 - `public/404.html` contains SPA routing fallback script
 - `index.html` includes redirect parameter handling for proper routing
 - Ensure 404.html is deployed alongside other static assets
+
+## Git Commit Guidelines
+- Never include attribution lines mentioning Claude Code or any case-insensitive variations of it in commit messages
+- Keep commit messages minimal and focused on the changes made

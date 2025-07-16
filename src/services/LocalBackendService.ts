@@ -2,7 +2,6 @@ import type { MockResponse } from "../types/api";
 
 import { ItemService } from "./ItemService";
 import { ItemValidationService } from "./itemValidation";
-import { LocalStorageService } from "./LocalStorageService";
 import { PlayerService } from "./PlayerService";
 import { isValidUUID } from "./validation";
 
@@ -33,15 +32,10 @@ function sendError(
 }
 
 export class LocalBackendService {
-  private storage: LocalStorageService;
-  private itemService: ItemService;
-  private playerService: PlayerService;
-
-  constructor() {
-    this.storage = new LocalStorageService();
-    this.itemService = new ItemService(this.storage);
-    this.playerService = new PlayerService(this.storage);
-  }
+  constructor(
+    private itemService: ItemService,
+    private playerService: PlayerService
+  ) {}
 
   async handleRequest(
     method: string,
