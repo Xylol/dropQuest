@@ -51,12 +51,6 @@ function calculateAchievementText(
   return null;
 }
 
-export function calculateItemLuck(runs: number, rarity: number): number {
-  if (runs === 0 || rarity === 0) {
-    return 0;
-  }
-  return rarity / runs;
-}
 
 export class ItemService {
   private readonly ITEMS_KEY = "items";

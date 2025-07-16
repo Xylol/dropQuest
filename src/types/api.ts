@@ -12,43 +12,6 @@ export interface MockResponse {
   json(): Promise<unknown>;
 }
 
-export interface CreateItemRequest {
-  name: string;
-  playerId: string;
-}
-
-export interface UpdateItemRequest {
-  itemId: string;
-  name?: string;
-  numberOfRuns?: number;
-  rarity?: number;
-  createdAt?: string;
-}
-
-export interface MarkAsFoundRequest {
-  itemId: string;
-  found: boolean;
-}
-
-export interface SetRarityRequest {
-  itemId: string;
-  rarity: number;
-}
-
-export interface AddRunsRequest {
-  itemId: string;
-  numberOfRuns: number;
-}
-
-export interface UpdateDateRequest {
-  itemId: string;
-  createdAt: string;
-}
-
-export interface UpdateHeroNameRequest {
-  heroName: string;
-}
-
 export interface ExportData {
   players: Player[];
   items: Item[];
@@ -62,18 +25,4 @@ export interface ImportResult {
   error?: string;
   playersImported?: number;
   itemsImported?: number;
-}
-
-export interface ItemResponse extends Item {
-  achievementText?: string | null;
-}
-
-export interface PlayerResponse extends Player {
-  items: ItemResponse[];
-  foundItemsCount: number;
-  luck?: number;
-}
-
-export interface DeleteResponse {
-  message: string;
 }
